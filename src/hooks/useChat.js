@@ -1,27 +1,29 @@
 import { useState, useEffect, useCallback } from 'react';
 import { streamChatResponse, generateChatTitle } from '../services/geminiService';
 
-const STORAGE_KEY = 'dev_interview_chats';
+export function useChat(userId) {
+  const STORAGE_KEY = `dev_interview_chats_${userId}`;
 
-export function useChat() {
   const [chats, setChats] = useState([]);
   const [activeChat, setActiveChat] = useState(null);
   const [isStreaming, setIsStreaming] = useState(false);
 
   useEffect(() => {
+    setChats([]);
+    setActiveChat(null);
     const stored = localStorage.getItem(STORAGE_KEY);
     if (stored) {
       const parsed = JSON.parse(stored);
       setChats(parsed);
       if (parsed.length > 0) setActiveChat(parsed[0].id);
     }
-  }, []);
+  }, [userId]);
 
   useEffect(() => {
     if (chats.length > 0) {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(chats));
     }
-  }, [chats]);
+  }, [chats, STORAGE_KEY]);
 
   const createNewChat = useCallback(() => {
     const newChat = {

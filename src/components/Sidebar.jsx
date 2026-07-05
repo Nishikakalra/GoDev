@@ -1,4 +1,14 @@
+import { useAuth } from '../context/AuthContext';
+import { useNavigate } from 'react-router-dom';
+
 export default function Sidebar({ chats, activeChat, onNewChat, onSwitchChat, onDeleteChat, onShowAnalytics }) {
+  const { user, logout } = useAuth();
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    logout();
+    navigate('/login', { replace: true });
+  };
   return (
     <div className="py-6 px-6">
        <div className="w-68 bg-[#FFFFFf]/30 border-r border-white/60 flex flex-col h-full  rounded-lg">
@@ -45,7 +55,18 @@ export default function Sidebar({ chats, activeChat, onNewChat, onSwitchChat, on
 
       <div className="p-4 border-t border-white/60 text-gray-600 text-sm">
         <div className="font-semibold text-[#1F3E6A] mb-1">Dev Interview Assistant</div>
-        <div className="text-xs">DSA • JavaScript • React</div>
+        <div className="text-xs mb-3">DSA • JavaScript • React</div>
+        {user && (
+          <div className="flex items-center justify-between">
+            <span className="text-xs text-[#1F3E6A] truncate">{user.name}</span>
+            <button
+              onClick={handleLogout}
+              className="text-xs text-red-500 hover:text-red-700 font-medium transition"
+            >
+              Logout
+            </button>
+          </div>
+        )}
       </div>
     </div>
     </div>

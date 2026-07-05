@@ -1,10 +1,12 @@
 import { useState } from 'react';
 import { useChat } from '../hooks/useChat';
+import { useAuth } from '../context/AuthContext';
 import Sidebar from '../components/Sidebar';
 import ChatArea from '../components/ChatArea';
 import Analytics from '../components/Analytics';
 
 export default function Home() {
+  const { user } = useAuth();
   const {
     chats,
     currentChat,
@@ -14,7 +16,7 @@ export default function Home() {
     sendMessage,
     switchChat,
     deleteChat
-  } = useChat();
+  } = useChat(user?.id);
 
   const [showAnalytics, setShowAnalytics] = useState(false);
 
